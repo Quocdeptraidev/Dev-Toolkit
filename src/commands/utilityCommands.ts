@@ -8,7 +8,8 @@ import {
 	generateRandomString,
 	base64Decode,
 	base64Encode,
-	decodeJWT
+	decodeJWT,
+	jsonToTypeScript
 } from '../utils/stringUtils';
 
 
@@ -184,6 +185,58 @@ export function registerUtilityCommands(context: vscode.ExtensionContext): void 
 		}
 	});
 
+	// 9. Command: Convert JSON to TypeScript Interface
+	const jsonToTsDisposable = vscode.commands.registerCommand('dev-toolkit.utility.jsonToTs', async () => {
+		try {
+			const editor = vscode.window.activeTextEditor;
+			if (!editor) {
+				vscode.window.showWarningMessage('Không tìm thấy tài liệu đang hoạt động.');
+				return;
+			}
+
+			const selection = editor.selection;
+			const jsonText = editor.document.getText(selection).trim();
+
+			if (!jsonText) {
+				vscode.window.showWarningMessage('Vui lòng bôi đen chuỗi JSON cần chuyển đổi.');
+				return;
+			}
+
+			// Hỏi người dùng tên Root Interface muốn đặt
+			const rootNameInput = await vscode.window.showInputBox({
+				prompt: 'Nhập tên Root Interface',
+				placeHolder: 'Ví dụ: UserProfile',
+				value: 'RootObject',
+				validateInput: (value) => {
+					if (!value || !/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(value)) {
+						return 'Tên interface không hợp lệ (không chứa ký tự đặc biệt, không bắt đầu bằng số).';
+					}
+					return null;
+				}
+			});
+
+			if (rootNameInput === undefined) {
+				return; // Người dùng bấm Esc hoặc tắt input
+			}
+
+			const tsInterfaces = jsonToTypeScript(jsonText, rootNameInput);
+
+			editor.edit(editBuilder => {
+				editBuilder.replace(selection, tsInterfaces);
+			}).then(success => {
+				if (success) {
+					Logger.info(`Chuyển đổi JSON sang TS Interface thành công: ${rootNameInput}`);
+				} else {
+					Logger.error('Lỗi khi chèn Interface vào editor.');
+				}
+			});
+		} catch (error: any) {
+			Logger.error('Lỗi khi chuyển đổi JSON sang TS Interface', error);
+			vscode.window.showErrorMessage(error.message || 'Chuyển đổi thất bại.');
+		}
+	});
+
+
 	// Đăng ký các command vào context subscriptions
 	context.subscriptions.push(
 		generateUUIDDisposable,
@@ -193,6 +246,7 @@ export function registerUtilityCommands(context: vscode.ExtensionContext): void 
 		generateRandomStringDisposable,
 		base64EncodeDisposable,
 		base64DecodeDisposable,
-		jwtDecodeDisposable
+		jwtDecodeDisposable,
+		jsonToTsDisposable
 	);
 }

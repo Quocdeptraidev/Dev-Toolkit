@@ -19,7 +19,8 @@
     "onCommand:dev-toolkit.utility.generateRandomString",
     "onCommand:dev-toolkit.utility.base64Encode",
     "onCommand:dev-toolkit.utility.base64Decode",
-    "onCommand:dev-toolkit.utility.jwtDecode"
+    "onCommand:dev-toolkit.utility.jwtDecode",
+    "onCommand:dev-toolkit.utility.jsonToTs"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -59,6 +60,10 @@
       {
         "command": "dev-toolkit.utility.jwtDecode",
         "title": "Dev Toolkit: Decode JWT Token"
+      },
+      {
+        "command": "dev-toolkit.utility.jsonToTs",
+        "title": "Dev Toolkit: Convert JSON to TypeScript Interface"
       }
     ]
   },

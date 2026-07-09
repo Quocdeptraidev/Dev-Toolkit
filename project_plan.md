@@ -7,7 +7,7 @@ Tệp này ghi lại chi tiết các đầu việc trong toàn bộ quá trình 
 ## 📅 Tổng quan tiến độ
 
 - [x] **Phase 1: Foundation (Nền móng)** - *Đã hoàn thành*
-- [/] **Phase 2: Utilities (Tiện ích lập trình)** - *Đang thực hiện (Hoàn thành UUID & Case Converter)*
+- [x] **Phase 2: Utilities (Tiện ích lập trình)** - *Đã hoàn thành*
 - [ ] **Phase 3: CRUD Generator (Bộ sinh code CRUD)**
 - [ ] **Phase 4: Template Engine (Hệ thống Template)**
 - [ ] **Phase 5: Project Analyzer (Bộ phân tích dự án)**
@@ -42,7 +42,7 @@ Các tính năng nhỏ, tiện ích chạy nhanh không phụ thuộc cấu trú
   - [x] Chuyển đổi vùng chọn sang `snake_case`
   - [x] Chuyển đổi vùng chọn sang `PascalCase`
 - [ ] **Chuyển đổi định dạng dữ liệu:**
-  - [ ] Trình biên dịch JSON → Interface TypeScript
+  - [x] Trình biên dịch JSON → Interface TypeScript
   - [ ] Trình biên dịch JSON → Java DTO class (hỗ trợ Lombok/Jackson)
 - [ ] **Các tiện ích khác:**
   - [x] Mã hóa/Giải mã Base64 cho đoạn text được chọn
