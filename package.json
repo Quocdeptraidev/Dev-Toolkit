@@ -11,7 +11,11 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:dev-toolkit.helloWorld"
+    "onCommand:dev-toolkit.helloWorld",
+    "onCommand:dev-toolkit.utility.generateUUID",
+    "onCommand:dev-toolkit.utility.toCamelCase",
+    "onCommand:dev-toolkit.utility.toSnakeCase",
+    "onCommand:dev-toolkit.utility.toPascalCase"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -19,6 +23,22 @@
       {
         "command": "dev-toolkit.helloWorld",
         "title": "Dev Toolkit: Hello World"
+      },
+      {
+        "command": "dev-toolkit.utility.generateUUID",
+        "title": "Dev Toolkit: Generate UUID"
+      },
+      {
+        "command": "dev-toolkit.utility.toCamelCase",
+        "title": "Dev Toolkit: Convert to camelCase"
+      },
+      {
+        "command": "dev-toolkit.utility.toSnakeCase",
+        "title": "Dev Toolkit: Convert to snake_case"
+      },
+      {
+        "command": "dev-toolkit.utility.toPascalCase",
+        "title": "Dev Toolkit: Convert to PascalCase"
       }
     ]
   },
