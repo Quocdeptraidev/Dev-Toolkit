@@ -45,7 +45,7 @@ Các tính năng nhỏ, tiện ích chạy nhanh không phụ thuộc cấu trú
   - [ ] Trình biên dịch JSON → Interface TypeScript
   - [ ] Trình biên dịch JSON → Java DTO class (hỗ trợ Lombok/Jackson)
 - [ ] **Các tiện ích khác:**
-  - [ ] Mã hóa/Giải mã Base64 cho đoạn text được chọn
+  - [x] Mã hóa/Giải mã Base64 cho đoạn text được chọn
   - [ ] Giải mã và hiển thị thông tin JWT Token (Header, Payload, Signature)
 
 ---

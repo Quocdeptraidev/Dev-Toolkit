@@ -16,7 +16,9 @@
     "onCommand:dev-toolkit.utility.toCamelCase",
     "onCommand:dev-toolkit.utility.toSnakeCase",
     "onCommand:dev-toolkit.utility.toPascalCase",
-    "onCommand:dev-toolkit.utility.generateRandomString"
+    "onCommand:dev-toolkit.utility.generateRandomString",
+    "onCommand:dev-toolkit.utility.base64Encode",
+    "onCommand:dev-toolkit.utility.base64Decode"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -44,6 +46,14 @@
       {
         "command": "dev-toolkit.utility.generateRandomString",
         "title": "Dev Toolkit: Generate Random String"
+      },
+      {
+        "command": "dev-toolkit.utility.base64Decode",
+        "title": "Dev Toolkit: Base64 Decode"
+      },
+      {
+        "command": "dev-toolkit.utility.base64Encode",
+        "title": "Dev Toolkit: Base64 Encode"
       }
     ]
   },

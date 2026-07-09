@@ -93,3 +93,28 @@ export function generateRandomString(length: number): string {
 }
 
 
+/**
+ * Mã hóa một chuỗi ký tự sang định dạng Base64.
+ * 
+ * @param str Chuỗi đầu vào dạng UTF-8
+ * @returns Chuỗi kết quả đã được mã hóa Base64
+ */
+export function base64Encode(str: string): string {
+	if (!str) {
+		return '';
+	}
+	return Buffer.from(str, 'utf-8').toString('base64');
+}
+
+/**
+ * Giải mã một chuỗi Base64 về chuỗi ký tự thông thường.
+ * 
+ * @param str Chuỗi đầu vào dạng Base64
+ * @returns Chuỗi kết quả sau giải mã dạng UTF-8
+ */
+export function base64Decode(str: string): string {
+	if (!str) {
+		return '';
+	}
+	return Buffer.from(str, 'base64').toString('utf-8');
+}
