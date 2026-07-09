@@ -20,7 +20,8 @@
     "onCommand:dev-toolkit.utility.base64Encode",
     "onCommand:dev-toolkit.utility.base64Decode",
     "onCommand:dev-toolkit.utility.jwtDecode",
-    "onCommand:dev-toolkit.utility.jsonToTs"
+    "onCommand:dev-toolkit.utility.jsonToTs",
+    "onCommand:dev-toolkit.utility.jsonToJavaDto"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -64,6 +65,10 @@
       {
         "command": "dev-toolkit.utility.jsonToTs",
         "title": "Dev Toolkit: Convert JSON to TypeScript Interface"
+      },
+      {
+        "command": "dev-toolkit.utility.jsonToJavaDto",
+        "title": "Dev Toolkit: Convert JSON to Java DTO"
       }
     ]
   },

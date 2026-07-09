@@ -209,7 +209,7 @@ export function jsonToTypeScript(jsonText: string, rootInterfaceName: string = '
 		if (obj === null) {
 			return 'null';
 		}
-		
+
 		if (Array.isArray(obj)) {
 			if (obj.length === 0) {
 				return 'unknown[]';
@@ -276,4 +276,144 @@ export function jsonToTypeScript(jsonText: string, rootInterfaceName: string = '
 		return `export type ${rootInterfaceName} = ${typeof parsed};`;
 	}
 }
+
+
+/**
+ * Biên dịch một chuỗi JSON thành các định nghĩa Class Java DTO tương ứng.
+ * Hỗ trợ Lombok annotations (@Data, @Builder, v.v.) và Jackson (@JsonProperty).
+ * 
+ * @param jsonText Chuỗi JSON hợp lệ
+ * @param rootClassName Tên của class gốc (mặc định: RootDto)
+ * @returns Chuỗi code chứa các Class Java DTO được định dạng đẹp mắt
+ */
+export function jsonToJavaDto(jsonText: string, rootClassName: string = 'RootDto'): string {
+	let parsed: any;
+	try {
+		parsed = JSON.parse(jsonText);
+	} catch (e) {
+		throw new Error('Đoạn văn bản bôi đen không phải là JSON hợp lệ.');
+	}
+
+	const classes: string[] = [];
+	const generatedNames = new Set<string>();
+
+	// Helper chuyển đổi key sang PascalCase cho Class name
+	function toPascalCaseName(str: string): string {
+		if (!str) {
+			return 'Key';
+		}
+		return str
+			.replace(/[^a-zA-Z0-9]+/g, ' ')
+			.trim()
+			.split(/\s+/)
+			.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+			.join('');
+	}
+
+	// Đảm bảo không trùng tên class và tự động thêm hậu tố 'Dto' nếu thiếu
+	function getUniqueClassName(name: string): string {
+		let uniqueName = name;
+		if (!uniqueName.endsWith('Dto') && !uniqueName.endsWith('DTO')) {
+			uniqueName += 'Dto';
+		}
+		let finalName = uniqueName;
+		let count = 1;
+		while (generatedNames.has(finalName)) {
+			finalName = `${uniqueName}${count}`;
+			count++;
+		}
+		generatedNames.add(finalName);
+		return finalName;
+	}
+
+	// Ánh xạ kiểu dữ liệu từ JS/JSON sang Java
+	function getJavaType(value: any, keyName: string): string {
+		if (value === null) {
+			return 'Object';
+		}
+
+		if (Array.isArray(value)) {
+			if (value.length === 0) {
+				return 'List<Object>';
+			}
+			const itemType = getJavaType(value[0], keyName);
+			return `List<${itemType}>`;
+		}
+
+		if (typeof value === 'object') {
+			const className = toPascalCaseName(keyName);
+			return parseObject(value, className);
+		}
+
+		if (typeof value === 'number') {
+			return Number.isInteger(value) ? 'Integer' : 'Double';
+		}
+
+		if (typeof value === 'boolean') {
+			return 'Boolean';
+		}
+
+		return 'String';
+	}
+
+	// Phân tích object và tạo class Java
+	function parseObject(obj: any, className: string): string {
+		if (obj === null || typeof obj !== 'object' || Array.isArray(obj)) {
+			return 'Object';
+		}
+
+		const uniqueName = getUniqueClassName(className);
+
+		let content = `import lombok.Data;\n`;
+		content += `import lombok.Builder;\n`;
+		content += `import lombok.NoArgsConstructor;\n`;
+		content += `import lombok.AllArgsConstructor;\n`;
+		content += `import com.fasterxml.jackson.annotation.JsonProperty;\n`;
+
+		// Kiểm tra xem có thuộc tính nào là List để import java.util.List không
+		let hasList = false;
+		for (const key of Object.keys(obj)) {
+			if (Array.isArray(obj[key])) {
+				hasList = true;
+				break;
+			}
+		}
+		if (hasList) {
+			content += `import java.util.List;\n`;
+		}
+
+		content += `\n`;
+		content += `@Data\n`;
+		content += `@Builder\n`;
+		content += `@NoArgsConstructor\n`;
+		content += `@AllArgsConstructor\n`;
+		content += `public class ${uniqueName} {\n\n`;
+
+		for (const key of Object.keys(obj)) {
+			const value = obj[key];
+			const type = getJavaType(value, key);
+			content += `\t@JsonProperty("${key}")\n`;
+			content += `\tprivate ${type} ${key};\n\n`;
+		}
+
+		content += `}\n`;
+		classes.push(content);
+		return uniqueName;
+	}
+
+	// Xử lý Root
+	if (Array.isArray(parsed)) {
+		if (parsed.length === 0) {
+			return `// JSON Array rỗng không thể sinh DTO.`;
+		}
+		const itemType = getJavaType(parsed[0], rootClassName);
+		return classes.reverse().join('\n\n');
+	} else if (typeof parsed === 'object' && parsed !== null) {
+		parseObject(parsed, rootClassName);
+		return classes.reverse().join('\n\n');
+	} else {
+		return `// JSON root không phải object/array.`;
+	}
+}
+
 
