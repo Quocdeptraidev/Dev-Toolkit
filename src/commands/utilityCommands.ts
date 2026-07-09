@@ -9,7 +9,8 @@ import {
 	base64Decode,
 	base64Encode,
 	decodeJWT,
-	jsonToTypeScript
+	jsonToTypeScript,
+	jsonToJavaDto
 } from '../utils/stringUtils';
 
 
@@ -237,6 +238,59 @@ export function registerUtilityCommands(context: vscode.ExtensionContext): void 
 	});
 
 
+	// 10. Command: Convert JSON to Java DTO
+	const jsonToJavaDtoDisposable = vscode.commands.registerCommand('dev-toolkit.utility.jsonToJavaDto', async () => {
+		try {
+			const editor = vscode.window.activeTextEditor;
+			if (!editor) {
+				vscode.window.showWarningMessage('Không tìm thấy tài liệu đang hoạt động.');
+				return;
+			}
+
+			const selection = editor.selection;
+			const jsonText = editor.document.getText(selection).trim();
+
+			if (!jsonText) {
+				vscode.window.showWarningMessage('Vui lòng bôi đen chuỗi JSON cần chuyển đổi.');
+				return;
+			}
+
+			// Hỏi người dùng tên Root Class
+			const rootNameInput = await vscode.window.showInputBox({
+				prompt: 'Nhập tên Root Class',
+				placeHolder: 'Ví dụ: UserProfile',
+				value: 'RootDto',
+				validateInput: (value) => {
+					if (!value || !/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(value)) {
+						return 'Tên class không hợp lệ (không chứa ký tự đặc biệt, không bắt đầu bằng số).';
+					}
+					return null;
+				}
+			});
+
+			if (rootNameInput === undefined) {
+				return; // Người dùng bấm Esc
+			}
+
+			const javaClasses = jsonToJavaDto(jsonText, rootNameInput);
+
+			editor.edit(editBuilder => {
+				editBuilder.replace(selection, javaClasses);
+			}).then(success => {
+				if (success) {
+					Logger.info(`Chuyển đổi JSON sang Java DTO thành công: ${rootNameInput}`);
+				} else {
+					Logger.error('Lỗi khi chèn Java DTO vào editor.');
+				}
+			});
+		} catch (error: any) {
+			Logger.error('Lỗi khi chuyển đổi JSON sang Java DTO', error);
+			vscode.window.showErrorMessage(error.message || 'Chuyển đổi thất bại.');
+		}
+	});
+
+
+
 	// Đăng ký các command vào context subscriptions
 	context.subscriptions.push(
 		generateUUIDDisposable,
@@ -247,6 +301,7 @@ export function registerUtilityCommands(context: vscode.ExtensionContext): void 
 		base64EncodeDisposable,
 		base64DecodeDisposable,
 		jwtDecodeDisposable,
-		jsonToTsDisposable
+		jsonToTsDisposable,
+		jsonToJavaDtoDisposable
 	);
 }

@@ -43,7 +43,7 @@ Các tính năng nhỏ, tiện ích chạy nhanh không phụ thuộc cấu trú
   - [x] Chuyển đổi vùng chọn sang `PascalCase`
 - [ ] **Chuyển đổi định dạng dữ liệu:**
   - [x] Trình biên dịch JSON → Interface TypeScript
-  - [ ] Trình biên dịch JSON → Java DTO class (hỗ trợ Lombok/Jackson)
+  - [x] Trình biên dịch JSON → Java DTO class (hỗ trợ Lombok/Jackson)
 - [ ] **Các tiện ích khác:**
   - [x] Mã hóa/Giải mã Base64 cho đoạn text được chọn
   - [x] Giải mã và hiển thị thông tin JWT Token (Header, Payload, Signature)
