@@ -406,7 +406,7 @@ export function jsonToJavaDto(jsonText: string, rootClassName: string = 'RootDto
 		if (parsed.length === 0) {
 			return `// JSON Array rỗng không thể sinh DTO.`;
 		}
-		const itemType = getJavaType(parsed[0], rootClassName);
+		getJavaType(parsed[0], rootClassName);
 		return classes.reverse().join('\n\n');
 	} else if (typeof parsed === 'object' && parsed !== null) {
 		parseObject(parsed, rootClassName);
