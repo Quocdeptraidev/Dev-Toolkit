@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as crypto from 'crypto';
 import { Logger } from '../utils/logger';
-import { toCamelCase, toSnakeCase, toPascalCase, generateRandomString } from '../utils/stringUtils';
+import { toCamelCase, toSnakeCase, toPascalCase, generateRandomString, base64Decode, base64Encode } from '../utils/stringUtils';
 
 
 /**
@@ -133,6 +133,17 @@ export function registerUtilityCommands(context: vscode.ExtensionContext): void 
 		}
 	});
 
+	// 6. Command: Base64 Encode
+	const base64EncodeDisposable = vscode.commands.registerCommand('dev-toolkit.utility.base64Encode', () => {
+		convertSelection(base64Encode, 'Base64 Encode');
+	});
+
+	// 7. Command: Base64 Decode
+	const base64DecodeDisposable = vscode.commands.registerCommand('dev-toolkit.utility.base64Decode', () => {
+		convertSelection(base64Decode, 'Base64 Decode');
+	});
+
+
 
 	// Đăng ký các command vào context subscriptions
 	context.subscriptions.push(
@@ -140,6 +151,8 @@ export function registerUtilityCommands(context: vscode.ExtensionContext): void 
 		toCamelCaseDisposable,
 		toSnakeCaseDisposable,
 		toPascalCaseDisposable,
-		generateRandomStringDisposable
+		generateRandomStringDisposable,
+		base64EncodeDisposable,
+		base64DecodeDisposable
 	);
 }
