@@ -159,3 +159,121 @@ export function decodeJWT(token: string): string {
 		throw new Error('Giải mã JWT thất bại (Base64url không hợp lệ hoặc dữ liệu không phải JSON).');
 	}
 }
+
+/**
+ * Biên dịch một chuỗi JSON thành các định nghĩa Interface TypeScript tương ứng.
+ * Hỗ trợ đệ quy các object lồng nhau và mảng.
+ * 
+ * @param jsonText Chuỗi JSON hợp lệ
+ * @param rootInterfaceName Tên của interface gốc (mặc định: RootObject)
+ * @returns Chuỗi code chứa các Interface TypeScript được định dạng đẹp mắt
+ */
+export function jsonToTypeScript(jsonText: string, rootInterfaceName: string = 'RootObject'): string {
+	let parsed: any;
+	try {
+		parsed = JSON.parse(jsonText);
+	} catch (e) {
+		throw new Error('Đoạn văn bản bôi đen không phải là JSON hợp lệ.');
+	}
+
+	const interfaces: string[] = [];
+	const generatedNames = new Set<string>();
+
+	// Hàm helper chuyển key sang PascalCase để làm tên Interface
+	function toPascalCaseName(str: string): string {
+		if (!str) {
+			return 'Key';
+		}
+		return str
+			.replace(/[^a-zA-Z0-9]+/g, ' ')
+			.trim()
+			.split(/\s+/)
+			.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+			.join('');
+	}
+
+	// Đảm bảo không trùng tên interface
+	function getUniqueInterfaceName(name: string): string {
+		let uniqueName = name;
+		let count = 1;
+		while (generatedNames.has(uniqueName)) {
+			uniqueName = `${name}${count}`;
+			count++;
+		}
+		generatedNames.add(uniqueName);
+		return uniqueName;
+	}
+
+	// Hàm đệ quy phân tích Object và sinh Interface
+	function parseObject(obj: any, interfaceName: string): string {
+		if (obj === null) {
+			return 'null';
+		}
+		
+		if (Array.isArray(obj)) {
+			if (obj.length === 0) {
+				return 'unknown[]';
+			}
+			const types = new Set<string>();
+			obj.forEach(item => {
+				types.add(getType(item, interfaceName + 'Item'));
+			});
+			const typeStr = Array.from(types).join(' | ');
+			return typeStr.includes(' ') ? `(${typeStr})[]` : `${typeStr}[]`;
+		}
+
+		if (typeof obj === 'object') {
+			const uniqueName = getUniqueInterfaceName(interfaceName);
+			let content = `export interface ${uniqueName} {\n`;
+			for (const key of Object.keys(obj)) {
+				const value = obj[key];
+				const subName = toPascalCaseName(key);
+				const type = getType(value, subName);
+				content += `\t${key}: ${type};\n`;
+			}
+			content += `}\n`;
+			interfaces.push(content);
+			return uniqueName;
+		}
+
+		return typeof obj;
+	}
+
+	// Hàm lấy kiểu dữ liệu
+	function getType(value: any, subInterfaceName: string): string {
+		if (value === null) {
+			return 'null';
+		}
+		if (Array.isArray(value)) {
+			if (value.length === 0) {
+				return 'unknown[]';
+			}
+			const types = new Set<string>();
+			value.forEach(item => {
+				types.add(getType(item, subInterfaceName));
+			});
+			const typeStr = Array.from(types).join(' | ');
+			return typeStr.includes(' ') ? `(${typeStr})[]` : `${typeStr}[]`;
+		}
+		if (typeof value === 'object') {
+			return parseObject(value, subInterfaceName);
+		}
+		return typeof value;
+	}
+
+	// Xử lý dữ liệu đầu vào tại Root
+	if (Array.isArray(parsed)) {
+		if (parsed.length === 0) {
+			return `export type ${rootInterfaceName} = unknown[];`;
+		}
+		const itemType = getType(parsed[0], rootInterfaceName + 'Item');
+		const finalInterfaces = interfaces.reverse().join('\n');
+		return `${finalInterfaces}\nexport type ${rootInterfaceName} = ${itemType}[];`;
+	} else if (typeof parsed === 'object' && parsed !== null) {
+		parseObject(parsed, rootInterfaceName);
+		return interfaces.reverse().join('\n');
+	} else {
+		return `export type ${rootInterfaceName} = ${typeof parsed};`;
+	}
+}
+
