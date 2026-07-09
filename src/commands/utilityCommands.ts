@@ -1,7 +1,15 @@
 import * as vscode from 'vscode';
 import * as crypto from 'crypto';
 import { Logger } from '../utils/logger';
-import { toCamelCase, toSnakeCase, toPascalCase, generateRandomString, base64Decode, base64Encode } from '../utils/stringUtils';
+import {
+	toCamelCase,
+	toSnakeCase,
+	toPascalCase,
+	generateRandomString,
+	base64Decode,
+	base64Encode,
+	decodeJWT
+} from '../utils/stringUtils';
 
 
 /**
@@ -143,7 +151,38 @@ export function registerUtilityCommands(context: vscode.ExtensionContext): void 
 		convertSelection(base64Decode, 'Base64 Decode');
 	});
 
+	// 8. Command: Decode JWT Token
+	const jwtDecodeDisposable = vscode.commands.registerCommand('dev-toolkit.utility.jwtDecode', () => {
+		try {
+			const editor = vscode.window.activeTextEditor;
+			if (!editor) {
+				vscode.window.showWarningMessage('Không tìm thấy tài liệu đang hoạt động.');
+				return;
+			}
 
+			const selection = editor.selection;
+			const token = editor.document.getText(selection).trim();
+
+			if (!token) {
+				vscode.window.showWarningMessage('Vui lòng bôi đen chuỗi JWT cần giải mã.');
+				return;
+			}
+
+			const decodedJsonStr = decodeJWT(token);
+
+			// Mở một tab editor mới tạm thời với ngôn ngữ định dạng là JSON
+			vscode.workspace.openTextDocument({
+				content: decodedJsonStr,
+				language: 'json'
+			}).then(doc => {
+				vscode.window.showTextDocument(doc);
+				Logger.info('Giải mã JWT thành công và mở tab mới.');
+			});
+		} catch (error: any) {
+			Logger.error('Lỗi khi giải mã JWT', error);
+			vscode.window.showErrorMessage(error.message || 'Giải mã JWT thất bại.');
+		}
+	});
 
 	// Đăng ký các command vào context subscriptions
 	context.subscriptions.push(
@@ -153,6 +192,7 @@ export function registerUtilityCommands(context: vscode.ExtensionContext): void 
 		toPascalCaseDisposable,
 		generateRandomStringDisposable,
 		base64EncodeDisposable,
-		base64DecodeDisposable
+		base64DecodeDisposable,
+		jwtDecodeDisposable
 	);
 }

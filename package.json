@@ -18,7 +18,8 @@
     "onCommand:dev-toolkit.utility.toPascalCase",
     "onCommand:dev-toolkit.utility.generateRandomString",
     "onCommand:dev-toolkit.utility.base64Encode",
-    "onCommand:dev-toolkit.utility.base64Decode"
+    "onCommand:dev-toolkit.utility.base64Decode",
+    "onCommand:dev-toolkit.utility.jwtDecode"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -54,6 +55,10 @@
       {
         "command": "dev-toolkit.utility.base64Encode",
         "title": "Dev Toolkit: Base64 Encode"
+      },
+      {
+        "command": "dev-toolkit.utility.jwtDecode",
+        "title": "Dev Toolkit: Decode JWT Token"
       }
     ]
   },

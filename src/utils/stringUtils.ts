@@ -118,3 +118,44 @@ export function base64Decode(str: string): string {
 	}
 	return Buffer.from(str, 'base64').toString('utf-8');
 }
+
+
+/**
+ * Hỗ trợ giải mã chuỗi định dạng Base64URL sang UTF-8.
+ */
+function base64UrlDecode(str: string): string {
+	// Chuyển đổi ký tự Base64URL sang Base64 chuẩn
+	let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+
+	// Thêm ký tự padding '=' nếu chiều dài chuỗi không chia hết cho 4
+	while (base64.length % 4) {
+		base64 += '=';
+	}
+	return Buffer.from(base64, 'base64').toString('utf-8');
+}
+
+/**
+ * Giải mã JWT Token (trả về JSON String của Header và Payload đã được format đẹp mắt).
+ * 
+ * @param token Chuỗi JWT Token (Header.Payload.Signature)
+ * @returns Chuỗi JSON đã format chứa Header và Payload
+ */
+export function decodeJWT(token: string): string {
+	const parts = token.split('.');
+	if (parts.length !== 3) {
+		throw new Error('Định dạng JWT không hợp lệ (JWT phải chứa đúng 3 phần phân tách bởi dấu chấm).');
+	}
+
+	try {
+		const headerJson = JSON.parse(base64UrlDecode(parts[0]));
+		const payloadJson = JSON.parse(base64UrlDecode(parts[1]));
+
+		// Trả về JSON được format thụt lề 4 khoảng trắng cho đẹp mắt
+		return JSON.stringify({
+			header: headerJson,
+			payload: payloadJson
+		}, null, 4);
+	} catch (e) {
+		throw new Error('Giải mã JWT thất bại (Base64url không hợp lệ hoặc dữ liệu không phải JSON).');
+	}
+}
