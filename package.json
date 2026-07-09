@@ -21,7 +21,8 @@
     "onCommand:dev-toolkit.utility.base64Decode",
     "onCommand:dev-toolkit.utility.jwtDecode",
     "onCommand:dev-toolkit.utility.jsonToTs",
-    "onCommand:dev-toolkit.utility.jsonToJavaDto"
+    "onCommand:dev-toolkit.utility.jsonToJavaDto",
+    "onCommand:dev-toolkit.crud.generate"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -69,6 +70,10 @@
       {
         "command": "dev-toolkit.utility.jsonToJavaDto",
         "title": "Dev Toolkit: Convert JSON to Java DTO"
+      },
+      {
+        "command": "dev-toolkit.crud.generate",
+        "title": "Dev Toolkit: Generate CRUD Module"
       }
     ]
   },
@@ -80,18 +85,20 @@
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "handlebars": "^4.7.9"
+  },
   "devDependencies": {
-    "@types/vscode": "^1.75.0",
     "@types/glob": "^8.0.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "16.x",
+    "@types/vscode": "^1.75.0",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.49.0",
+    "@vscode/test-electron": "^2.2.3",
     "eslint": "^8.33.0",
     "glob": "^8.1.0",
     "mocha": "^10.2.0",
-    "typescript": "^4.9.5",
-    "@vscode/test-electron": "^2.2.3"
+    "typescript": "^4.9.5"
   }
 }
