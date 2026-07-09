@@ -15,7 +15,8 @@
     "onCommand:dev-toolkit.utility.generateUUID",
     "onCommand:dev-toolkit.utility.toCamelCase",
     "onCommand:dev-toolkit.utility.toSnakeCase",
-    "onCommand:dev-toolkit.utility.toPascalCase"
+    "onCommand:dev-toolkit.utility.toPascalCase",
+    "onCommand:dev-toolkit.utility.generateRandomString"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -39,6 +40,10 @@
       {
         "command": "dev-toolkit.utility.toPascalCase",
         "title": "Dev Toolkit: Convert to PascalCase"
+      },
+      {
+        "command": "dev-toolkit.utility.generateRandomString",
+        "title": "Dev Toolkit: Generate Random String"
       }
     ]
   },

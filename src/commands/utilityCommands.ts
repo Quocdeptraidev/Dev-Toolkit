@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import * as crypto from 'crypto';
 import { Logger } from '../utils/logger';
-import { toCamelCase, toSnakeCase, toPascalCase } from '../utils/stringUtils';
+import { toCamelCase, toSnakeCase, toPascalCase, generateRandomString } from '../utils/stringUtils';
+
 
 /**
  * Đăng ký tất cả các lệnh tiện ích (Utility Commands) cho Extension
@@ -9,7 +10,7 @@ import { toCamelCase, toSnakeCase, toPascalCase } from '../utils/stringUtils';
  * @param context Context của Extension từ VS Code
  */
 export function registerUtilityCommands(context: vscode.ExtensionContext): void {
-	
+
 	// 1. Command: Sinh mã ngẫu nhiên UUID
 	const generateUUIDDisposable = vscode.commands.registerCommand('dev-toolkit.utility.generateUUID', () => {
 		try {
@@ -86,11 +87,59 @@ export function registerUtilityCommands(context: vscode.ExtensionContext): void 
 		convertSelection(toPascalCase, 'PascalCase');
 	});
 
+	// 5. Command: Sinh chuỗi ngẫu nhiên
+	const generateRandomStringDisposable = vscode.commands.registerCommand('dev-toolkit.utility.generateRandomString', async () => {
+		try {
+			const editor = vscode.window.activeTextEditor;
+			if (!editor) {
+				vscode.window.showWarningMessage('Không tìm thấy tài liệu đang hoạt động.');
+				return;
+			}
+
+			// Hiển thị ô nhập liệu (InputBox) yêu cầu người dùng nhập độ dài
+			const lengthInput = await vscode.window.showInputBox({
+				prompt: 'Nhập độ dài chuỗi ngẫu nhiên cần sinh',
+				placeHolder: 'Ví dụ: 16',
+				value: '16', // Giá trị mặc định
+				validateInput: (value) => {
+					const num = Number(value);
+					if (isNaN(num) || num <= 0 || !Number.isInteger(num)) {
+						return 'Vui lòng nhập một số nguyên dương hợp lệ.';
+					}
+					return null; // Không có lỗi
+				}
+			});
+
+			// Nếu người dùng bấm Esc hoặc tắt ô nhập liệu (lengthInput sẽ là undefined)
+			if (lengthInput === undefined) {
+				return;
+			}
+
+			const length = parseInt(lengthInput, 10);
+			const randomStr = generateRandomString(length);
+
+			editor.edit(editBuilder => {
+				editBuilder.replace(editor.selection, randomStr);
+			}).then(success => {
+				if (success) {
+					Logger.info(`Sinh chuỗi ngẫu nhiên thành công (độ dài ${length}): ${randomStr}`);
+				} else {
+					Logger.error('Lỗi khi chèn chuỗi ngẫu nhiên vào editor.');
+				}
+			});
+		} catch (error) {
+			Logger.error('Lỗi trong quá trình sinh chuỗi ngẫu nhiên', error);
+			vscode.window.showErrorMessage('Có lỗi xảy ra khi sinh chuỗi ngẫu nhiên.');
+		}
+	});
+
+
 	// Đăng ký các command vào context subscriptions
 	context.subscriptions.push(
 		generateUUIDDisposable,
 		toCamelCaseDisposable,
 		toSnakeCaseDisposable,
-		toPascalCaseDisposable
+		toPascalCaseDisposable,
+		generateRandomStringDisposable
 	);
 }
