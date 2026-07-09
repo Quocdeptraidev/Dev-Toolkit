@@ -9,7 +9,7 @@ export function toCamelCase(str: string): string {
 	if (!str) {
 		return '';
 	}
-	
+
 	let temp = str;
 	// Nếu chuỗi viết hoa toàn bộ (ví dụ: CONSTANT_CASE), đưa về chữ thường trước
 	if (str === str.toUpperCase() && (str.includes('_') || str.includes('-'))) {
@@ -41,7 +41,7 @@ export function toSnakeCase(str: string): string {
 	if (!str) {
 		return '';
 	}
-	
+
 	return str
 		.replace(/([a-z0-9])([A-Z])/g, '$1_$2') // Tách chữ thường và chữ hoa bằng gạch dưới
 		.replace(/[^a-zA-Z0-9]+/g, '_')        // Thay thế ký tự đặc biệt/khoảng trắng bằng gạch dưới
@@ -75,3 +75,21 @@ export function toPascalCase(str: string): string {
 		.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
 		.join('');
 }
+
+/**
+ * Sinh một chuỗi ký tự ngẫu nhiên gồm chữ hoa, chữ thường và số.
+ * 
+ * @param length Độ dài của chuỗi cần sinh
+ * @returns Chuỗi ngẫu nhiên được sinh ra
+ */
+export function generateRandomString(length: number): string {
+	let result = '';
+	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	const charactersLength = characters.length;
+	for (let i = 0; i < length; i++) {
+		result += characters.charAt(Math.floor(Math.random() * charactersLength));
+	}
+	return result;
+}
+
+
