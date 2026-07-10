@@ -2,14 +2,17 @@ import * as path from 'path';
 import { BaseGenerator } from './baseGenerator';
 import { ICrudConfig } from '../types/crud';
 import { Logger } from '../utils/logger';
+import { TemplateService } from '../services/templateService';
 
 /**
  * Generator sinh boilerplate CRUD cho dự án React TypeScript.
  */
 export class ReactGenerator extends BaseGenerator {
+    private templateService: TemplateService;
 
     constructor(private extensionPath: string) {
         super();
+        this.templateService = new TemplateService(extensionPath);
     }
 
     /**
@@ -61,10 +64,7 @@ export class ReactGenerator extends BaseGenerator {
             const idField = config.fields.find(f => f.isId) || { name: 'id', type: 'Long', isId: true };
             const idName = idField.name;
 
-            // 2. Thiết lập đường dẫn template và output
-            const templateDir = path.join(this.extensionPath, 'src', 'templates', 'react');
-            
-            // Cấu trúc thư mục module React đầu ra
+            // 2. Thiết lập đường dẫn output
             const targetDir = config.targetPath;
 
             // 3. Chuẩn bị dữ liệu render cho Handlebars
@@ -95,7 +95,7 @@ export class ReactGenerator extends BaseGenerator {
             ];
 
             for (const file of filesToGenerate) {
-                const templatePath = path.join(templateDir, file.template);
+                const templatePath = this.templateService.getTemplatePath('react', file.template, config.workspacePath);
                 const fileContent = this.compileTemplate(templatePath, renderData);
                 this.writeOutputFile(file.output, fileContent);
             }

@@ -60,6 +60,10 @@ export function registerCrudCommands(context: vscode.ExtensionContext): void {
             }
             const targetPath = folderUri[0].fsPath;
 
+            // Lấy thư mục workspace chứa targetPath
+            const workspaceFolder = vscode.workspace.getWorkspaceFolder(folderUri[0]);
+            const workspacePath = workspaceFolder ? workspaceFolder.uri.fsPath : undefined;
+
             // 4. Nhập Java Package (nếu là Spring Boot)
             let packageName: string | undefined = undefined;
             if (style === 'spring') {
@@ -140,7 +144,8 @@ export function registerCrudCommands(context: vscode.ExtensionContext): void {
                     fields,
                     targetPath,
                     packageName,
-                    style: style as 'spring' | 'react'
+                    style: style as 'spring' | 'react',
+                    workspacePath
                 });
             });
 

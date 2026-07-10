@@ -22,7 +22,8 @@
     "onCommand:dev-toolkit.utility.jwtDecode",
     "onCommand:dev-toolkit.utility.jsonToTs",
     "onCommand:dev-toolkit.utility.jsonToJavaDto",
-    "onCommand:dev-toolkit.crud.generate"
+    "onCommand:dev-toolkit.crud.generate",
+    "onCommand:dev-toolkit.template.init"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -74,6 +75,10 @@
       {
         "command": "dev-toolkit.crud.generate",
         "title": "Dev Toolkit: Generate CRUD Module"
+      },
+      {
+        "command": "dev-toolkit.template.init",
+        "title": "Dev Toolkit: Initialize Custom Templates"
       }
     ]
   },
