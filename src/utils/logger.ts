@@ -6,7 +6,7 @@ export class Logger {
 	/**
 	 * Khởi tạo Output Channel cho extension
 	 */
-	public static initialize(channelName: string = 'Dev Toolkit') {
+	public static initialize(channelName = 'Dev Toolkit') {
 		if (!this.channel) {
 			this.channel = vscode.window.createOutputChannel(channelName);
 		}

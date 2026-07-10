@@ -1,0 +1,12 @@
+package {{packageName}}.service;
+
+import {{packageName}}.dto.{{pascal moduleName}}Dto;
+import java.util.List;
+
+public interface {{pascal moduleName}}Service {
+    List<{{pascal moduleName}}Dto> getAll();
+    {{pascal moduleName}}Dto getById({{idType}} id);
+    {{pascal moduleName}}Dto create({{pascal moduleName}}Dto dto);
+    {{pascal moduleName}}Dto update({{idType}} id, {{pascal moduleName}}Dto dto);
+    void delete({{idType}} id);
+}

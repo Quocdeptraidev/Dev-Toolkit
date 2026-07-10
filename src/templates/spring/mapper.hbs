@@ -1,0 +1,31 @@
+package {{packageName}}.mapper;
+
+import {{packageName}}.entity.{{pascal moduleName}};
+import {{packageName}}.dto.{{pascal moduleName}}Dto;
+import org.springframework.stereotype.Component;
+
+@Component
+public class {{pascal moduleName}}Mapper {
+
+    public {{pascal moduleName}}Dto toDto({{pascal moduleName}} entity) {
+        if (entity == null) {
+            return null;
+        }
+        return {{pascal moduleName}}Dto.builder()
+                {{#each fields}}
+                .{{camel name}}(entity.get{{pascal name}}())
+                {{/each}}
+                .build();
+    }
+
+    public {{pascal moduleName}} toEntity({{pascal moduleName}}Dto dto) {
+        if (dto == null) {
+            return null;
+        }
+        return {{pascal moduleName}}.builder()
+                {{#each fields}}
+                .{{camel name}}(dto.get{{camel name}}())
+                {{/each}}
+                .build();
+    }
+}
