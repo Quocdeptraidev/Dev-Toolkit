@@ -1,0 +1,94 @@
+import { useState, useEffect, useCallback } from 'react';
+
+export interface {{pascal moduleName}} {
+    {{#each fields}}
+    {{camel name}}{{#unless required}}?{{/unless}}: {{#if (eq type "string")}}string{{else}}{#if (eq type "boolean")}}boolean{{else}}number{{/if}}{{/if}};
+    {{/each}}
+}
+
+export function use{{pascal moduleName}}(apiUrl: string = '/api/v1/{{snake moduleName}}s') {
+    const [items, setItems] = useState<{{pascal moduleName}}[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const fetchItems = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            const data = await response.json();
+            setItems(data);
+        } catch (err: any) {
+            setError(err.message || 'An error occurred');
+        } finally {
+            setLoading(false);
+        }
+    }, [apiUrl]);
+
+    const createItem = async (item: Omit<{{pascal moduleName}}, '{{camel idName}}'>) => {
+        setLoading(true);
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(item),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to create item');
+            }
+            await fetchItems();
+        } catch (err: any) {
+            setError(err.message || 'An error occurred');
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const updateItem = async (id: any, item: Partial<{{pascal moduleName}}>) => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${apiUrl}/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(item),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to update item');
+            }
+            await fetchItems();
+        } catch (err: any) {
+            setError(err.message || 'An error occurred');
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const deleteItem = async (id: any) => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${apiUrl}/${id}`, {
+                method: 'DELETE',
+            });
+            if (!response.ok) {
+                throw new Error('Failed to delete item');
+            }
+            await fetchItems();
+        } catch (err: any) {
+            setError(err.message || 'An error occurred');
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchItems();
+    }, [fetchItems]);
+
+    return { items, loading, error, fetchItems, createItem, updateItem, deleteItem };
+}

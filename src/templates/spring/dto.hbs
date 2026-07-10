@@ -1,10 +1,9 @@
-package {{packageName}}.entity;
+package {{packageName}}.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import javax.persistence.*;
 {{#each fields}}
 {{#if (eq type "BigDecimal")}}
 import java.math.BigDecimal;
@@ -17,24 +16,12 @@ import java.time.LocalDateTime;
 {{/if}}
 {{/each}}
 
-@Entity
-@Table(name = "{{snake moduleName}}s")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class {{pascal moduleName}} {
-
+public class {{pascal moduleName}}Dto {
     {{#each fields}}
-    {{#if isId}}
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    {{else}}
-    {{#if required}}
-    @Column(nullable = false)
-    {{/if}}
-    {{/if}}
     private {{type}} {{camel name}};
-
     {{/each}}
 }

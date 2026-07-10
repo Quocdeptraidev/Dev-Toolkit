@@ -1,0 +1,45 @@
+package {{packageName}}.controller;
+
+import {{packageName}}.dto.{{pascal moduleName}}Dto;
+import {{packageName}}.service.{{pascal moduleName}}Service;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/v1/{{snake moduleName}}s")
+@RequiredArgsConstructor
+@CrossOrigin
+public class {{pascal moduleName}}Controller {
+
+    private final {{pascal moduleName}}Service service;
+
+    @GetMapping
+    public ResponseEntity<List<{{pascal moduleName}}Dto>> getAll() {
+        return ResponseEntity.ok(service.getAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<{{pascal moduleName}}Dto> getById(@PathVariable {{idType}} id) {
+        return ResponseEntity.ok(service.getById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<{{pascal moduleName}}Dto> create(@RequestBody {{pascal moduleName}}Dto dto) {
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<{{pascal moduleName}}Dto> update(@PathVariable {{idType}} id, @RequestBody {{pascal moduleName}}Dto dto) {
+        return ResponseEntity.ok(service.update(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable {{idType}} id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+}

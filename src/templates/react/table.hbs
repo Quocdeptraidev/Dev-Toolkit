@@ -1,0 +1,44 @@
+import React from 'react';
+import { {{pascal moduleName}} } from '../hooks/use{{pascal moduleName}}';
+
+interface {{pascal moduleName}}TableProps {
+    items: {{pascal moduleName}}[];
+    onEdit: (item: {{pascal moduleName}}) => void;
+    onDelete: (id: any) => void;
+}
+
+export const {{pascal moduleName}}Table: React.FC<{{pascal moduleName}}TableProps> = ({ items, onEdit, onDelete }) => {
+    return (
+        <div className="table-container">
+            <table className="custom-table">
+                <thead>
+                    <tr>
+                        {{#each fields}}
+                        <th>{{label name}}</th>
+                        {{/each}}
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {items.length === 0 ? (
+                        <tr>
+                            <td colSpan={ {{fields.length}} + 1 } style={ { textAlign: 'center' } }>No data available</td>
+                        </tr>
+                    ) : (
+                        items.map((item) => (
+                            <tr key={item.{{camel idName}} }>
+                                {{#each fields}}
+                                <td>{String(item.{{camel name}} ?? '')}</td>
+                                {{/each}}
+                                <td>
+                                    <button className="btn btn-edit" onClick={() => onEdit(item)}>Edit</button>
+                                    <button className="btn btn-delete" onClick={() => onDelete(item.{{camel idName}})}>Delete</button>
+                                </td>
+                            </tr>
+                        ))
+                    )}
+                </tbody>
+            </table>
+        </div>
+    );
+};

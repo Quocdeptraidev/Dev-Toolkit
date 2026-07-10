@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { Logger } from './utils/logger';
 import { registerUtilityCommands } from './commands/utilityCommands';
+import { registerCrudCommands } from './commands/crudCommands';
 
 export function activate(context: vscode.ExtensionContext) {
 	// Khởi tạo hệ thống Log
@@ -8,7 +9,7 @@ export function activate(context: vscode.ExtensionContext) {
 	Logger.info('Congratulations, your extension "dev-toolkit" is now active!');
 
 	// Đăng ký các lệnh cơ bản
-	let disposable = vscode.commands.registerCommand('dev-toolkit.helloWorld', () => {
+	const disposable = vscode.commands.registerCommand('dev-toolkit.helloWorld', () => {
 		Logger.info('Command "dev-toolkit.helloWorld" was triggered.');
 		vscode.window.showInformationMessage('Hello World from Dev Toolkit!');
 	});
@@ -16,6 +17,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Đăng ký các lệnh tiện ích (Milestone 2)
 	registerUtilityCommands(context);
+
+	// Đăng ký các lệnh sinh CRUD (Milestone 3 / Phase 3)
+	registerCrudCommands(context);
 }
 
 export function deactivate() {

@@ -8,7 +8,7 @@ Tệp này ghi lại chi tiết các đầu việc trong toàn bộ quá trình 
 
 - [x] **Phase 1: Foundation (Nền móng)** - *Đã hoàn thành*
 - [x] **Phase 2: Utilities (Tiện ích lập trình)** - *Đã hoàn thành*
-- [ ] **Phase 3: CRUD Generator (Bộ sinh code CRUD)**
+- [x] **Phase 3: CRUD Generator (Bộ sinh code CRUD)** - *Đã hoàn thành*
 - [ ] **Phase 4: Template Engine (Hệ thống Template)**
 - [ ] **Phase 5: Project Analyzer (Bộ phân tích dự án)**
 - [ ] **Phase 6: Smart Generator (Bộ sinh code thông minh)**
@@ -52,17 +52,17 @@ Các tính năng nhỏ, tiện ích chạy nhanh không phụ thuộc cấu trú
 
 ### 🧱 Phase 3: CRUD Generator (Bộ sinh code CRUD)
 Sinh mã boilerplate cho các module CRUD của React và Spring Boot.
-- [ ] **Spring Boot Generator:**
-  - [ ] Sinh Entity Class (hỗ trợ JPA Annotations)
-  - [ ] Sinh Repository Interface (Spring Data JPA)
-  - [ ] Sinh Service Interface và ServiceImpl Class
-  - [ ] Sinh Controller REST API với các endpoint cơ bản (GET, POST, PUT, DELETE)
-  - [ ] Sinh DTO & Mapper class (hỗ trợ MapStruct nếu cần)
-- [ ] **React Generator:**
-  - [ ] Sinh cấu trúc Page chứa danh sách và form
-  - [ ] Sinh Component Table hiển thị dữ liệu (hỗ trợ phân trang)
-  - [ ] Sinh Component Form nhập liệu (hỗ trợ validation cơ bản)
-  - [ ] Sinh Custom Hook gọi API (hỗ trợ Axios / Fetch)
+- [x] **Spring Boot Generator:**
+  - [x] Sinh Entity Class (hỗ trợ JPA Annotations)
+  - [x] Sinh Repository Interface (Spring Data JPA)
+  - [x] Sinh Service Interface và ServiceImpl Class
+  - [x] Sinh Controller REST API với các endpoint cơ bản (GET, POST, PUT, DELETE)
+  - [x] Sinh DTO & Mapper class (hỗ trợ MapStruct nếu cần)
+- [x] **React Generator:**
+  - [x] Sinh cấu trúc Page chứa danh sách và form
+  - [x] Sinh Component Table hiển thị dữ liệu (hỗ trợ phân trang)
+  - [x] Sinh Component Form nhập liệu (hỗ trợ validation cơ bản)
+  - [x] Sinh Custom Hook gọi API (hỗ trợ Axios / Fetch)
 
 ---
 

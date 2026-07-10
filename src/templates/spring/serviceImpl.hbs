@@ -1,0 +1,69 @@
+package {{packageName}}.service.impl;
+
+import {{packageName}}.entity.{{pascal moduleName}};
+import {{packageName}}.dto.{{pascal moduleName}}Dto;
+import {{packageName}}.repository.{{pascal moduleName}}Repository;
+import {{packageName}}.service.{{pascal moduleName}}Service;
+import {{packageName}}.mapper.{{pascal moduleName}}Mapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class {{pascal moduleName}}ServiceImpl implements {{pascal moduleName}}Service {
+
+    private final {{pascal moduleName}}Repository repository;
+    private final {{pascal moduleName}}Mapper mapper;
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<{{pascal moduleName}}Dto> getAll() {
+        return repository.findAll().stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public {{pascal moduleName}}Dto getById({{idType}} id) {
+        {{pascal moduleName}} entity = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("{{pascal moduleName}} not found with id: " + id));
+        return mapper.toDto(entity);
+    }
+
+    @Override
+    public {{pascal moduleName}}Dto create({{pascal moduleName}}Dto dto) {
+        {{pascal moduleName}} entity = mapper.toEntity(dto);
+        {{pascal moduleName}} saved = repository.save(entity);
+        return mapper.toDto(saved);
+    }
+
+    @Override
+    public {{pascal moduleName}}Dto update({{idType}} id, {{pascal moduleName}}Dto dto) {
+        {{pascal moduleName}} entity = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("{{pascal moduleName}} not found with id: " + id));
+        
+        // Map values
+        {{#each fields}}
+        {{#unless isId}}
+        entity.set{{pascal name}}(dto.get{{pascal name}}());
+        {{/unless}}
+        {{/each}}
+
+        {{pascal moduleName}} saved = repository.save(entity);
+        return mapper.toDto(saved);
+    }
+
+    @Override
+    public void delete({{idType}} id) {
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("{{pascal moduleName}} not found with id: " + id);
+        }
+        repository.deleteById(id);
+    }
+}

@@ -168,7 +168,7 @@ export function decodeJWT(token: string): string {
  * @param rootInterfaceName Tên của interface gốc (mặc định: RootObject)
  * @returns Chuỗi code chứa các Interface TypeScript được định dạng đẹp mắt
  */
-export function jsonToTypeScript(jsonText: string, rootInterfaceName: string = 'RootObject'): string {
+export function jsonToTypeScript(jsonText: string, rootInterfaceName = 'RootObject'): string {
 	let parsed: any;
 	try {
 		parsed = JSON.parse(jsonText);
@@ -286,7 +286,7 @@ export function jsonToTypeScript(jsonText: string, rootInterfaceName: string = '
  * @param rootClassName Tên của class gốc (mặc định: RootDto)
  * @returns Chuỗi code chứa các Class Java DTO được định dạng đẹp mắt
  */
-export function jsonToJavaDto(jsonText: string, rootClassName: string = 'RootDto'): string {
+export function jsonToJavaDto(jsonText: string, rootClassName = 'RootDto'): string {
 	let parsed: any;
 	try {
 		parsed = JSON.parse(jsonText);

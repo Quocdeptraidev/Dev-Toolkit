@@ -1,0 +1,62 @@
+import React, { useState, useEffect } from 'react';
+import { {{pascal moduleName}} } from '../hooks/use{{pascal moduleName}}';
+
+interface {{pascal moduleName}}FormProps {
+    item?: {{pascal moduleName}} | null;
+    onSubmit: (data: any) => void;
+    onCancel: () => void;
+}
+
+export const {{pascal moduleName}}Form: React.FC<{{pascal moduleName}}FormProps> = ({ item, onSubmit, onCancel }) => {
+    const [formData, setFormData] = useState<Partial<{{pascal moduleName}}>>({});
+
+    useEffect(() => {
+        if (item) {
+            setFormData(item);
+        } else {
+            setFormData({});
+        }
+    }, [item]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value, type } = e.target;
+        let parsedValue: any = value;
+        if (type === 'checkbox') {
+            parsedValue = (e.target as HTMLInputElement).checked;
+        } else if (type === 'number') {
+            parsedValue = value === '' ? '' : Number(value);
+        }
+        setFormData((prev) => ({ ...prev, [name]: parsedValue }));
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        onSubmit(formData);
+    };
+
+    return (
+        <form className="custom-form" onSubmit={handleSubmit}>
+            <h3>{item ? 'Edit' : 'Create'} {{pascal moduleName}}</h3>
+            {{#each fields}}
+            {{#unless isId}}
+            <div className="form-group">
+                <label htmlFor="{{camel name}}">{{label name}}{{#if required}} *{{/if}}</label>
+                <input
+                    id="{{camel name}}"
+                    name="{{camel name}}"
+                    type="{{#if (eq type 'number')}}number{{else}}{#if (eq type 'boolean')}}checkbox{{else}}text{{/if}}{{/if}}"
+                    value={formData.{{camel name}} !== undefined ? String(formData.{{camel name}}) : ''}
+                    onChange={handleChange}
+                    required={ {{#if required}}true{{else}}false{{/if}} }
+                    className="form-control"
+                />
+            </div>
+            {{/unless}}
+            {{/each}}
+            <div className="form-actions">
+                <button type="submit" className="btn btn-submit">Save</button>
+                <button type="button" className="btn btn-cancel" onClick={onCancel}>Cancel</button>
+            </div>
+        </form>
+    );
+};

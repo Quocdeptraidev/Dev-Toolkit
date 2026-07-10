@@ -3,12 +3,41 @@ import * as path from 'path';
 import * as Handlebars from 'handlebars';
 import { ICrudConfig } from '../types/crud';
 import { Logger } from '../utils/logger';
+import { toCamelCase, toPascalCase, toSnakeCase } from '../utils/stringUtils';
 
 /**
  * Lớp trừu tượng cơ sở cho các Generator trong hệ thống.
  * Cung cấp các hàm dùng chung để biên dịch template Handlebars và ghi file ra đĩa.
  */
 export abstract class BaseGenerator {
+
+    constructor() {
+        this.registerHelpers();
+    }
+
+    /**
+     * Đăng ký các custom helper cho Handlebars để sử dụng trong templates
+     */
+    private registerHelpers(): void {
+        // Helper so sánh bằng
+        Handlebars.registerHelper('eq', (a: any, b: any) => a === b);
+
+        // Helpers chuyển đổi chữ
+        Handlebars.registerHelper('camel', (str: string) => toCamelCase(str));
+        Handlebars.registerHelper('pascal', (str: string) => toPascalCase(str));
+        Handlebars.registerHelper('snake', (str: string) => toSnakeCase(str));
+        Handlebars.registerHelper('capitalize', (str: string) => {
+            if (!str) return '';
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        });
+
+        // Helper sinh label hiển thị thân thiện từ tên trường camelCase
+        Handlebars.registerHelper('label', (str: string) => {
+            if (!str) return '';
+            const result = str.replace(/([A-Z])/g, ' $1');
+            return result.charAt(0).toUpperCase() + result.slice(1).trim();
+        });
+    }
 
     /**
      * Đọc tệp template Handlebars (.hbs) và sinh ra mã nguồn dạng Text
