@@ -3,6 +3,7 @@ import { Logger } from './utils/logger';
 import { registerUtilityCommands } from './commands/utilityCommands';
 import { registerCrudCommands } from './commands/crudCommands';
 import { registerTemplateCommands } from './commands/templateCommands';
+import { registerProjectCommands } from './commands/projectCommands';
 
 export function activate(context: vscode.ExtensionContext) {
 	// Khởi tạo hệ thống Log
@@ -24,6 +25,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Đăng ký các lệnh quản lý Template (Phase 4)
 	registerTemplateCommands(context);
+
+	// Đăng ký các lệnh phân tích dự án (Phase 5)
+	registerProjectCommands(context);
 }
 
 export function deactivate() {

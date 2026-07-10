@@ -10,7 +10,7 @@ Tệp này ghi lại chi tiết các đầu việc trong toàn bộ quá trình 
 - [x] **Phase 2: Utilities (Tiện ích lập trình)** - *Đã hoàn thành*
 - [x] **Phase 3: CRUD Generator (Bộ sinh code CRUD)** - *Đã hoàn thành*
 - [x] **Phase 4: Template Engine (Hệ thống Template)** - *Đã hoàn thành*
-- [ ] **Phase 5: Project Analyzer (Bộ phân tích dự án)**
+- [x] **Phase 5: Project Analyzer (Bộ phân tích dự án)** - *Đã hoàn thành*
 - [ ] **Phase 6: Smart Generator (Bộ sinh code thông minh)**
 - [ ] **Phase 7: Git Toolkit (Tiện ích Git)**
 - [ ] **Phase 8: AI Assistant (Trợ lý AI)**
@@ -77,10 +77,10 @@ Tách rời logic sinh code ra khỏi mã nguồn extension bằng template engi
 
 ### 🔍 Phase 5: Project Analyzer (Bộ phân tích dự án)
 Extension tự động quét và phân tích dự án hiện tại để hiểu ngữ cảnh.
-- [ ] Phân tích các file cấu hình (`package.json`, `pom.xml`, `build.gradle`, `tsconfig.json`) để xác định:
-  - [ ] Framework đang sử dụng (React, Spring Boot, NextJS, NestJS, Vue...)
-  - [ ] Các thư viện bổ trợ đang cài đặt (Lombok, MapStruct, TailwindCSS, Axios...)
-- [ ] Nhận diện cấu trúc thư mục dự án (kiểu Clean Architecture, Hexagonal, Layered, hay Standard MVC)
+- [x] Phân tích các file cấu hình (`package.json`, `pom.xml`, `build.gradle`, `tsconfig.json`) để xác định:
+  - [x] Framework đang sử dụng (React, Spring Boot, NextJS, NestJS, Vue...)
+  - [x] Các thư viện bổ trợ đang cài đặt (Lombok, MapStruct, TailwindCSS, Axios...)
+- [x] Nhận diện cấu trúc thư mục dự án (kiểu Clean Architecture, Hexagonal, Layered, hay Standard MVC)
 
 ---
 

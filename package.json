@@ -23,7 +23,8 @@
     "onCommand:dev-toolkit.utility.jsonToTs",
     "onCommand:dev-toolkit.utility.jsonToJavaDto",
     "onCommand:dev-toolkit.crud.generate",
-    "onCommand:dev-toolkit.template.init"
+    "onCommand:dev-toolkit.template.init",
+    "onCommand:dev-toolkit.project.analyze"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -79,6 +80,10 @@
       {
         "command": "dev-toolkit.template.init",
         "title": "Dev Toolkit: Initialize Custom Templates"
+      },
+      {
+        "command": "dev-toolkit.project.analyze",
+        "title": "Dev Toolkit: Analyze Project"
       }
     ]
   },
