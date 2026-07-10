@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { Logger } from './utils/logger';
 import { registerUtilityCommands } from './commands/utilityCommands';
 import { registerCrudCommands } from './commands/crudCommands';
+import { registerTemplateCommands } from './commands/templateCommands';
 
 export function activate(context: vscode.ExtensionContext) {
 	// Khởi tạo hệ thống Log
@@ -20,6 +21,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Đăng ký các lệnh sinh CRUD (Milestone 3 / Phase 3)
 	registerCrudCommands(context);
+
+	// Đăng ký các lệnh quản lý Template (Phase 4)
+	registerTemplateCommands(context);
 }
 
 export function deactivate() {

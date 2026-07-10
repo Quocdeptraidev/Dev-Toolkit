@@ -2,14 +2,17 @@ import * as path from 'path';
 import { BaseGenerator } from './baseGenerator';
 import { ICrudConfig } from '../types/crud';
 import { Logger } from '../utils/logger';
+import { TemplateService } from '../services/templateService';
 
 /**
  * Generator sinh boilerplate CRUD cho dự án Spring Boot.
  */
 export class SpringGenerator extends BaseGenerator {
+    private templateService: TemplateService;
 
     constructor(private extensionPath: string) {
         super();
+        this.templateService = new TemplateService(extensionPath);
     }
 
     /**
@@ -41,7 +44,6 @@ export class SpringGenerator extends BaseGenerator {
             // 2. Thiết lập đường dẫn thư mục nguồn
             const packageFolder = config.packageName.replace(/\./g, '/');
             const javaBase = path.join(config.targetPath, packageFolder);
-            const templateDir = path.join(this.extensionPath, 'src', 'templates', 'spring');
 
             // 3. Chuẩn bị dữ liệu render cho Handlebars
             const renderData = {
@@ -85,7 +87,7 @@ export class SpringGenerator extends BaseGenerator {
             ];
 
             for (const file of filesToGenerate) {
-                const templatePath = path.join(templateDir, file.template);
+                const templatePath = this.templateService.getTemplatePath('spring', file.template, config.workspacePath);
                 const fileContent = this.compileTemplate(templatePath, renderData);
                 this.writeOutputFile(file.output, fileContent);
             }

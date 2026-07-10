@@ -9,7 +9,7 @@ Tệp này ghi lại chi tiết các đầu việc trong toàn bộ quá trình 
 - [x] **Phase 1: Foundation (Nền móng)** - *Đã hoàn thành*
 - [x] **Phase 2: Utilities (Tiện ích lập trình)** - *Đã hoàn thành*
 - [x] **Phase 3: CRUD Generator (Bộ sinh code CRUD)** - *Đã hoàn thành*
-- [ ] **Phase 4: Template Engine (Hệ thống Template)**
+- [x] **Phase 4: Template Engine (Hệ thống Template)** - *Đã hoàn thành*
 - [ ] **Phase 5: Project Analyzer (Bộ phân tích dự án)**
 - [ ] **Phase 6: Smart Generator (Bộ sinh code thông minh)**
 - [ ] **Phase 7: Git Toolkit (Tiện ích Git)**
@@ -68,10 +68,10 @@ Sinh mã boilerplate cho các module CRUD của React và Spring Boot.
 
 ### 📐 Phase 4: Template Engine (Hệ thống Template)
 Tách rời logic sinh code ra khỏi mã nguồn extension bằng template engine.
-- [ ] Tích hợp **Handlebars.js** làm bộ dựng template chính
-- [ ] Thiết kế cơ chế quét thư mục template nội bộ của extension
-- [ ] Hỗ trợ cấu hình thư mục template tùy biến của người dùng tại `.dev-toolkit/templates/` trong workspace
-- [ ] Cho phép người dùng chỉnh sửa template trực tiếp và áp dụng ngay khi sinh code
+- [x] Tích hợp **Handlebars.js** làm bộ dựng template chính
+- [x] Thiết kế cơ chế quét thư mục template nội bộ của extension
+- [x] Hỗ trợ cấu hình thư mục template tùy biến của người dùng tại `.dev-toolkit/templates/` trong workspace
+- [x] Cho phép người dùng chỉnh sửa template trực tiếp và áp dụng ngay khi sinh code
 
 ---
 

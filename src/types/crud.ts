@@ -17,4 +17,5 @@ export interface ICrudConfig {
     targetPath: string;      // Thư mục đích để ghi code được sinh ra
     packageName?: string;    // Java package name (nếu sinh code Spring Boot, ví dụ: com.example.product)
     style?: 'spring' | 'react'; // Loại project muốn sinh
+    workspacePath?: string;  // Đường dẫn gốc của workspace đang mở
 }
