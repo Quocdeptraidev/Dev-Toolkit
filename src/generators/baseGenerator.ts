@@ -4,6 +4,7 @@ import * as Handlebars from 'handlebars';
 import { ICrudConfig } from '../types/crud';
 import { Logger } from '../utils/logger';
 import { toCamelCase, toPascalCase, toSnakeCase } from '../utils/stringUtils';
+import { IProjectInfo } from '../types/project';
 
 /**
  * Lớp trừu tượng cơ sở cho các Generator trong hệ thống.
@@ -83,6 +84,7 @@ export abstract class BaseGenerator {
      * bắt buộc phải tự cài đặt để xử lý logic sinh code riêng biệt.
      * 
      * @param config Cấu hình sinh mã CRUD
+     * @param projectInfo Thông tin chẩn đoán dự án phục vụ sinh code thông minh
      */
-    public abstract generate(config: ICrudConfig): Promise<void>;
+    public abstract generate(config: ICrudConfig, projectInfo?: IProjectInfo): Promise<void>;
 }

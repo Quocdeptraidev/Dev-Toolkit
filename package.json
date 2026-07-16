@@ -24,7 +24,11 @@
     "onCommand:dev-toolkit.utility.jsonToJavaDto",
     "onCommand:dev-toolkit.crud.generate",
     "onCommand:dev-toolkit.template.init",
-    "onCommand:dev-toolkit.project.analyze"
+    "onCommand:dev-toolkit.project.analyze",
+    "onCommand:dev-toolkit.git.generateCommitMessage",
+    "onCommand:dev-toolkit.git.generateChangelog",
+    "onCommand:dev-toolkit.git.generateReleaseNotes",
+    "onCommand:dev-toolkit.git.createBranch"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -84,8 +88,39 @@
       {
         "command": "dev-toolkit.project.analyze",
         "title": "Dev Toolkit: Analyze Project"
+      },
+      {
+        "command": "dev-toolkit.git.generateCommitMessage",
+        "title": "Dev Toolkit: Generate Commit Message"
+      },
+      {
+        "command": "dev-toolkit.git.generateChangelog",
+        "title": "Dev Toolkit: Generate CHANGELOG"
+      },
+      {
+        "command": "dev-toolkit.git.generateReleaseNotes",
+        "title": "Dev Toolkit: Generate Release Notes"
+      },
+      {
+        "command": "dev-toolkit.git.createBranch",
+        "title": "Dev Toolkit: Create Git Branch"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Dev Toolkit",
+      "properties": {
+        "dev-toolkit.ai.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "API Key cho Gemini AI Provider (để sử dụng các tính năng thông minh)."
+        },
+        "dev-toolkit.ai.model": {
+          "type": "string",
+          "default": "gemini-1.5-flash",
+          "description": "Model Gemini sử dụng (ví dụ: gemini-1.5-flash, gemini-2.5-flash)."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

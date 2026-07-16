@@ -4,6 +4,7 @@ import { registerUtilityCommands } from './commands/utilityCommands';
 import { registerCrudCommands } from './commands/crudCommands';
 import { registerTemplateCommands } from './commands/templateCommands';
 import { registerProjectCommands } from './commands/projectCommands';
+import { registerGitCommands } from './commands/gitCommands';
 
 export function activate(context: vscode.ExtensionContext) {
 	// Khởi tạo hệ thống Log
@@ -28,6 +29,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Đăng ký các lệnh phân tích dự án (Phase 5)
 	registerProjectCommands(context);
+
+	// Đăng ký các lệnh Git Toolkit (Phase 7)
+	registerGitCommands(context);
 }
 
 export function deactivate() {

@@ -11,8 +11,8 @@ Tệp này ghi lại chi tiết các đầu việc trong toàn bộ quá trình 
 - [x] **Phase 3: CRUD Generator (Bộ sinh code CRUD)** - *Đã hoàn thành*
 - [x] **Phase 4: Template Engine (Hệ thống Template)** - *Đã hoàn thành*
 - [x] **Phase 5: Project Analyzer (Bộ phân tích dự án)** - *Đã hoàn thành*
-- [ ] **Phase 6: Smart Generator (Bộ sinh code thông minh)**
-- [ ] **Phase 7: Git Toolkit (Tiện ích Git)**
+- [x] **Phase 6: Smart Generator (Bộ sinh code thông minh)** - *Đã hoàn thành*
+- [x] **Phase 7: Git Toolkit (Tiện ích Git)** - *Đã hoàn thành*
 - [ ] **Phase 8: AI Assistant (Trợ lý AI)**
 - [ ] **Phase 9: Sidebar UI (Giao diện Sidebar)**
 - [ ] **Phase 10: Marketplace & Publishing (Phát hành)**
@@ -86,18 +86,18 @@ Extension tự động quét và phân tích dự án hiện tại để hiểu 
 
 ### 🧠 Phase 6: Smart Generator (Bộ sinh code thông minh)
 Sinh mã đồng bộ 100% với coding convention hiện có của dự án khách hàng.
-- [ ] Tự động sinh code khớp với thư viện đang dùng (ví dụ: dự án dùng Lombok thì Entity/DTO sẽ tự động sinh `@Data` thay vì hàm Getter/Setter thủ công)
-- [ ] Đồng bộ phong cách đặt tên (ví dụ: biến dùng camelCase hay snake_case, file dùng kebab-case hay camelCase)
-- [ ] Đồng bộ style import (absolute path `@/components/...` hay relative path `../../components/...`)
+- [x] Tự động sinh code khớp với thư viện đang dùng (ví dụ: dự án dùng Lombok thì Entity/DTO sẽ tự động sinh `@Data` thay vì hàm Getter/Setter thủ công)
+- [x] Đồng bộ phong cách đặt tên (ví dụ: biến dùng camelCase hay snake_case, file dùng kebab-case hay camelCase)
+- [x] Đồng bộ style import (absolute path `@/components/...` hay relative path `../../components/...`)
 
 ---
 
 ### 🐙 Phase 7: Git Toolkit (Tiện ích Git)
 Hỗ trợ quản lý phiên bản và quy trình làm việc Git.
-- [ ] Tự động sinh Commit Message chuẩn Conventional Commits dựa trên Git Diff hiện tại
-- [ ] Tự động sinh file `CHANGELOG.md` từ lịch sử commit
-- [ ] Đọc Git Diff và tạo bản nháp Release Notes hoặc Release Changelog nhanh
-- [ ] Đề xuất tên Branch mới theo chuẩn đặt tên (ví dụ: `feature/xxx`, `bugfix/xxx`)
+- [x] Tự động sinh Commit Message chuẩn Conventional Commits dựa trên Git Diff hiện tại
+- [x] Tự động sinh file `CHANGELOG.md` từ lịch sử commit
+- [x] Đọc Git Diff và tạo bản nháp Release Notes hoặc Release Changelog nhanh
+- [x] Đề xuất tên Branch mới theo chuẩn đặt tên (ví dụ: `feature/xxx`, `bugfix/xxx`)
 
 ---
 

@@ -1,38 +1,60 @@
 import React from 'react';
-import { {{pascal moduleName}} } from '../hooks/use{{pascal moduleName}}';
+import { {{pascal moduleName}} } from '{{hookImportPath}}';
 
-interface {{pascal moduleName}}TableProps {
+interface {{tableComponentName}}Props {
     items: {{pascal moduleName}}[];
     onEdit: (item: {{pascal moduleName}}) => void;
     onDelete: (id: any) => void;
 }
 
-export const {{pascal moduleName}}Table: React.FC<{{pascal moduleName}}TableProps> = ({ items, onEdit, onDelete }) => {
+export const {{tableComponentName}}: React.FC<{{tableComponentName}}Props> = ({ items, onEdit, onDelete }) => {
     return (
-        <div className="table-container">
-            <table className="custom-table">
-                <thead>
+        <div className="{{#if useTailwind}}overflow-x-auto shadow border-b border-gray-200 rounded-lg{{else}}table-container{{/if}}">
+            <table className="{{#if useTailwind}}min-w-full divide-y divide-gray-200{{else}}custom-table{{/if}}">
+                <thead className="{{#if useTailwind}}bg-gray-50{{/if}}">
                     <tr>
                         {{#each fields}}
-                        <th>{{label name}}</th>
+                        <th className="{{#if ../useTailwind}}px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider{{/if}}">
+                            {{label name}}
+                        </th>
                         {{/each}}
-                        <th>Actions</th>
+                        <th className="{{#if useTailwind}}px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider{{/if}}">
+                            Actions
+                        </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="{{#if useTailwind}}bg-white divide-y divide-gray-200{{/if}}">
                     {items.length === 0 ? (
                         <tr>
-                            <td colSpan={ {{fields.length}} + 1 } style={ { textAlign: 'center' } }>No data available</td>
+                            <td 
+                                colSpan={ {{fields.length}} + 1 } 
+                                className="{{#if useTailwind}}px-6 py-10 text-center text-sm text-gray-500{{/if}}"
+                                style={ {{#unless useTailwind}}{ textAlign: 'center' }{{/unless}} }
+                            >
+                                No data available
+                            </td>
                         </tr>
                     ) : (
                         items.map((item) => (
-                            <tr key={item.{{camel idName}} }>
+                            <tr key={item.{{camel idName}} } className="{{#if useTailwind}}hover:bg-gray-50 transition-colors{{/if}}">
                                 {{#each fields}}
-                                <td>{String(item.{{camel name}} ?? '')}</td>
+                                <td className="{{#if ../useTailwind}}px-6 py-4 whitespace-nowrap text-sm text-gray-900{{/if}}">
+                                    {String(item.{{camel name}} ?? '')}
+                                </td>
                                 {{/each}}
-                                <td>
-                                    <button className="btn btn-edit" onClick={() => onEdit(item)}>Edit</button>
-                                    <button className="btn btn-delete" onClick={() => onDelete(item.{{camel idName}})}>Delete</button>
+                                <td className="{{#if useTailwind}}px-6 py-4 whitespace-nowrap text-sm font-medium{{/if}}">
+                                    <button 
+                                        className="{{#if useTailwind}}text-indigo-600 hover:text-indigo-900 mr-4 font-semibold transition-colors{{else}}btn btn-edit{{/if}}" 
+                                        onClick={() => onEdit(item)}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button 
+                                        className="{{#if useTailwind}}text-red-600 hover:text-red-900 font-semibold transition-colors{{else}}btn btn-delete{{/if}}" 
+                                        onClick={() => onDelete(item.{{camel idName}})}
+                                    >
+                                        Delete
+                                    </button>
                                 </td>
                             </tr>
                         ))

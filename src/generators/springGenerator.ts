@@ -3,6 +3,7 @@ import { BaseGenerator } from './baseGenerator';
 import { ICrudConfig } from '../types/crud';
 import { Logger } from '../utils/logger';
 import { TemplateService } from '../services/templateService';
+import { IProjectInfo } from '../types/project';
 
 /**
  * Generator sinh boilerplate CRUD cho dự án Spring Boot.
@@ -10,7 +11,7 @@ import { TemplateService } from '../services/templateService';
 export class SpringGenerator extends BaseGenerator {
     private templateService: TemplateService;
 
-    constructor(private extensionPath: string) {
+    constructor(extensionPath: string) {
         super();
         this.templateService = new TemplateService(extensionPath);
     }
@@ -19,8 +20,9 @@ export class SpringGenerator extends BaseGenerator {
      * Sinh toàn bộ mã nguồn CRUD cho Spring Boot
      * 
      * @param config Cấu hình CRUD từ người dùng
+     * @param projectInfo Thông tin chẩn đoán dự án phục vụ sinh code thông minh
      */
-    public async generate(config: ICrudConfig): Promise<void> {
+    public async generate(config: ICrudConfig, projectInfo?: IProjectInfo): Promise<void> {
         try {
             if (!config.packageName) {
                 throw new Error('Package name là bắt buộc đối với Spring Boot CRUD Generator.');
@@ -28,7 +30,11 @@ export class SpringGenerator extends BaseGenerator {
 
             Logger.info(`Bắt đầu sinh code Spring Boot CRUD cho module: ${config.moduleName}`);
 
-            // 1. Phân tích các trường dữ liệu
+            // 1. Phân tích các thư viện đi kèm của dự án
+            const useLombok = projectInfo ? !!projectInfo.libraries.lombok : true;
+            const useJpa = projectInfo ? !!projectInfo.libraries.jpa : true;
+
+            // 2. Phân tích các trường dữ liệu
             const fieldsToRender = [...config.fields];
             let idField = fieldsToRender.find(f => f.isId);
             
@@ -41,17 +47,19 @@ export class SpringGenerator extends BaseGenerator {
             const idType = idField.type;
             const idName = idField.name;
 
-            // 2. Thiết lập đường dẫn thư mục nguồn
+            // 3. Thiết lập đường dẫn thư mục nguồn
             const packageFolder = config.packageName.replace(/\./g, '/');
             const javaBase = path.join(config.targetPath, packageFolder);
 
-            // 3. Chuẩn bị dữ liệu render cho Handlebars
+            // 4. Chuẩn bị dữ liệu render cho Handlebars
             const renderData = {
                 packageName: config.packageName,
                 moduleName: config.moduleName,
                 fields: fieldsToRender,
                 idType: idType,
-                idName: idName
+                idName: idName,
+                useLombok: useLombok,
+                useJpa: useJpa
             };
 
             // 4. Biên dịch và sinh các tệp tin

@@ -31,4 +31,14 @@ export interface IProjectInfo {
      * Cấu trúc tổ chức thư mục của dự án ('layered' | 'modular' | 'unknown')
      */
     folderStructure?: 'layered' | 'modular' | 'unknown';
+
+    /**
+     * Phong cách import của dự án ('absolute' | 'relative')
+     */
+    importStyle?: 'absolute' | 'relative';
+
+    /**
+     * Quy cách đặt tên file phát hiện được ('pascal' | 'kebab' | 'camel')
+     */
+    namingConvention?: 'pascal' | 'kebab' | 'camel';
 }
