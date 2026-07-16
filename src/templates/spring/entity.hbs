@@ -1,10 +1,14 @@
 package {{packageName}}.entity;
 
+{{#if useLombok}}
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+{{/if}}
+{{#if useJpa}}
 import javax.persistence.*;
+{{/if}}
 {{#each fields}}
 {{#if (eq type "BigDecimal")}}
 import java.math.BigDecimal;
@@ -17,15 +21,20 @@ import java.time.LocalDateTime;
 {{/if}}
 {{/each}}
 
+{{#if useJpa}}
 @Entity
 @Table(name = "{{snake moduleName}}s")
+{{/if}}
+{{#if useLombok}}
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+{{/if}}
 public class {{pascal moduleName}} {
 
     {{#each fields}}
+    {{#if ../useJpa}}
     {{#if isId}}
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +43,38 @@ public class {{pascal moduleName}} {
     @Column(nullable = false)
     {{/if}}
     {{/if}}
+    {{/if}}
     private {{type}} {{camel name}};
 
     {{/each}}
+    {{#unless useLombok}}
+    // ==========================================
+    // No-Args Constructor
+    // ==========================================
+    public {{pascal moduleName}}() {
+    }
+
+    // ==========================================
+    // All-Args Constructor
+    // ==========================================
+    public {{pascal moduleName}}({{#each fields}}{{type}} {{camel name}}{{#unless @last}}, {{/unless}}{{/each}}) {
+        {{#each fields}}
+        this.{{camel name}} = {{camel name}};
+        {{/each}}
+    }
+
+    // ==========================================
+    // Getters & Setters
+    // ==========================================
+    {{#each fields}}
+    public {{type}} get{{pascal name}}() {
+        return this.{{camel name}};
+    }
+
+    public void set{{pascal name}}({{type}} {{camel name}}) {
+        this.{{camel name}} = {{camel name}};
+    }
+
+    {{/each}}
+    {{/unless}}
 }

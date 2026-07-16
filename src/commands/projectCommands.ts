@@ -53,7 +53,7 @@ export function registerProjectCommands(context: vscode.ExtensionContext): void 
             }
 
             // 3. Hiển thị Webview Dashboard kết quả
-            showDiagnosticsDashboard(context, selectedWorkspace.name, projectInfo);
+            showDiagnosticsDashboard(selectedWorkspace.name, projectInfo);
 
         } catch (error: any) {
             Logger.error('Lỗi khi thực hiện phân tích dự án', error);
@@ -67,7 +67,7 @@ export function registerProjectCommands(context: vscode.ExtensionContext): void 
 /**
  * Tạo và hiển thị VS Code Webview Panel chứa Dashboard chẩn đoán dự án
  */
-function showDiagnosticsDashboard(context: vscode.ExtensionContext, projectName: string, info: IProjectInfo): void {
+function showDiagnosticsDashboard(projectName: string, info: IProjectInfo): void {
     // Tạo Webview Panel mới
     const panel = vscode.window.createWebviewPanel(
         'projectDiagnostics',

@@ -12,9 +12,10 @@ export class ProjectAnalyzer {
      * Thực hiện quét và phân tích dự án tại đường dẫn workspace cho trước.
      * 
      * @param workspacePath Đường dẫn tuyệt đối tới workspace dự án
+     * @param targetPath Đường dẫn thư mục đích muốn sinh code (dùng để nhận dạng naming convention)
      * @returns Thông tin chẩn đoán dự án IProjectInfo
      */
-    public async analyze(workspacePath: string): Promise<IProjectInfo> {
+    public async analyze(workspacePath: string, targetPath?: string): Promise<IProjectInfo> {
         const info: IProjectInfo = {
             type: 'unknown',
             isTypeScript: false,
@@ -31,10 +32,13 @@ export class ProjectAnalyzer {
                 this.analyzePackageJson(packageJsonPath, info);
             }
 
-            // 2. Kiểm tra tsconfig.json
+            // 2. Kiểm tra tsconfig.json và cấu hình path aliases
             const tsconfigPath = path.join(workspacePath, 'tsconfig.json');
             if (fs.existsSync(tsconfigPath)) {
                 info.isTypeScript = true;
+                this.analyzeTsConfig(tsconfigPath, info);
+            } else {
+                info.importStyle = 'relative';
             }
 
             // 3. Phân tích dự án Maven Spring Boot (pom.xml)
@@ -52,7 +56,10 @@ export class ProjectAnalyzer {
             // 5. Nhận diện cấu trúc thư mục dự án
             info.folderStructure = this.detectFolderStructure(workspacePath, info.type);
 
-            Logger.info(`Phân tích dự án thành công: Type=${info.type}, TS=${info.isTypeScript}, Structure=${info.folderStructure}`);
+            // 6. Nhận diện quy cách đặt tên file hiện có tại thư mục đích
+            info.namingConvention = this.detectNamingConvention(targetPath || workspacePath);
+
+            Logger.info(`Phân tích dự án thành công: Type=${info.type}, TS=${info.isTypeScript}, Structure=${info.folderStructure}, Import=${info.importStyle}, Naming=${info.namingConvention}`);
             return info;
         } catch (error) {
             Logger.error(`Lỗi trong quá trình phân tích dự án tại: ${workspacePath}`, error);
@@ -227,5 +234,65 @@ export class ProjectAnalyzer {
         }
 
         return 'unknown';
+    }
+
+    /**
+     * Phân tích tsconfig.json để phát hiện alias import.
+     */
+    private analyzeTsConfig(tsconfigPath: string, info: IProjectInfo): void {
+        try {
+            let content = fs.readFileSync(tsconfigPath, 'utf-8');
+            // Loại bỏ comment trong JSON (nếu có) để parse được bằng JSON.parse
+            content = content.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1');
+            const tsconfig = JSON.parse(content);
+            const paths = tsconfig.compilerOptions?.paths;
+
+            if (paths && Object.keys(paths).some(key => key.startsWith('@/'))) {
+                info.importStyle = 'absolute';
+            } else {
+                info.importStyle = 'relative';
+            }
+        } catch (error) {
+            Logger.error(`Lỗi khi parse tsconfig.json: ${tsconfigPath}`, error);
+            info.importStyle = 'relative';
+        }
+    }
+
+    /**
+     * Nhận diện quy cách đặt tên file hiện tại trong thư mục nguồn đích.
+     */
+    private detectNamingConvention(dirPath: string): 'pascal' | 'kebab' | 'camel' {
+        try {
+            if (!fs.existsSync(dirPath)) return 'pascal';
+
+            const files = fs.readdirSync(dirPath);
+            let kebabCount = 0;
+            let camelCount = 0;
+            let pascalCount = 0;
+
+            for (const file of files) {
+                const ext = path.extname(file);
+                // Chỉ phân tích các file code nguồn
+                if (!['.ts', '.tsx', '.js', '.jsx', '.java'].includes(ext)) continue;
+
+                const baseName = path.basename(file, ext);
+                if (baseName.includes('-')) {
+                    kebabCount++;
+                } else if (/^[A-Z]/.test(baseName)) {
+                    pascalCount++;
+                } else if (/^[a-z]/.test(baseName)) {
+                    camelCount++;
+                }
+            }
+
+            const max = Math.max(kebabCount, pascalCount, camelCount);
+            if (max === 0) return 'pascal'; // Mặc định là PascalCase
+            if (max === kebabCount) return 'kebab';
+            if (max === camelCount) return 'camel';
+            return 'pascal';
+        } catch (error) {
+            Logger.error(`Lỗi khi nhận diện quy cách đặt tên tại: ${dirPath}`, error);
+            return 'pascal';
+        }
     }
 }

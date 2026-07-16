@@ -1,9 +1,11 @@
 package {{packageName}}.dto;
 
+{{#if useLombok}}
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+{{/if}}
 {{#each fields}}
 {{#if (eq type "BigDecimal")}}
 import java.math.BigDecimal;
@@ -16,12 +18,46 @@ import java.time.LocalDateTime;
 {{/if}}
 {{/each}}
 
+{{#if useLombok}}
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+{{/if}}
 public class {{pascal moduleName}}Dto {
+
     {{#each fields}}
     private {{type}} {{camel name}};
     {{/each}}
+
+    {{#unless useLombok}}
+    // ==========================================
+    // No-Args Constructor
+    // ==========================================
+    public {{pascal moduleName}}Dto() {
+    }
+
+    // ==========================================
+    // All-Args Constructor
+    // ==========================================
+    public {{pascal moduleName}}Dto({{#each fields}}{{type}} {{camel name}}{{#unless @last}}, {{/unless}}{{/each}}) {
+        {{#each fields}}
+        this.{{camel name}} = {{camel name}};
+        {{/each}}
+    }
+
+    // ==========================================
+    // Getters & Setters
+    // ==========================================
+    {{#each fields}}
+    public {{type}} get{{pascal name}}() {
+        return this.{{camel name}};
+    }
+
+    public void set{{pascal name}}({{type}} {{camel name}}) {
+        this.{{camel name}} = {{camel name}};
+    }
+
+    {{/each}}
+    {{/unless}}
 }

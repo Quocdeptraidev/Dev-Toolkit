@@ -2,6 +2,8 @@ import { ICrudConfig } from '../types/crud';
 import { SpringGenerator } from '../generators/springGenerator';
 import { ReactGenerator } from '../generators/reactGenerator';
 import { Logger } from '../utils/logger';
+import { ProjectAnalyzer } from '../analyzers/projectAnalyzer';
+import { IProjectInfo } from '../types/project';
 
 /**
  * Interface cho CRUD Service điều phối sinh mã nguồn.
@@ -29,12 +31,19 @@ export class CrudService implements ICrudService {
         try {
             Logger.info(`CrudService bắt đầu tiếp nhận yêu cầu sinh CRUD style [${config.style}] cho module [${config.moduleName}]`);
             
+            // 1. Phân tích dự án tại workspace để nạp convention thông minh
+            let projectInfo: IProjectInfo | undefined;
+            if (config.workspacePath) {
+                const analyzer = new ProjectAnalyzer();
+                projectInfo = await analyzer.analyze(config.workspacePath, config.targetPath);
+            }
+
             if (config.style === 'spring') {
                 const generator = new SpringGenerator(this.extensionPath);
-                await generator.generate(config);
+                await generator.generate(config, projectInfo);
             } else if (config.style === 'react') {
                 const generator = new ReactGenerator(this.extensionPath);
-                await generator.generate(config);
+                await generator.generate(config, projectInfo);
             } else {
                 throw new Error(`Kiểu sinh code (style) '${config.style}' không được hỗ trợ.`);
             }
